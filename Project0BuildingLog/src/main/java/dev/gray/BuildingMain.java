@@ -2,6 +2,7 @@ package dev.gray;
 
 import dev.gray.controllers.BuildingController;
 import io.javalin.Javalin;
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class BuildingMain {
 
@@ -15,8 +16,16 @@ public class BuildingMain {
         BuildingController buildingController = new BuildingController();
 
 //      GET CALL FOR MASTER BUILDING LOG
-        app.get("/log", buildingController::handleGetAllLogs);
+//        app.get("/log", buildingController::handleGetAllLogs);
 
 
+//        TRYING OUT HANDLER GROUPS
+        app.routes(() -> path("/log", () -> {
+            get(buildingController::handleGetAllLogs);
+            path(":id", () -> {
+                get(buildingController::handleFindLogByUserId);
+            });
+
+        }));
     }
 }
